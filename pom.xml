@@ -68,24 +68,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Implementation-Build>${buildNumber}</Implementation-Build>
-                            <Class-Path>lib/ToHPluginUtils.jar ${project.artifactId}/ToHPluginUtils.jar
-                                ../lib/ToHPluginUtils.jar ../ToHPluginUtils.jar
-                            </Class-Path>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>2.4.0</version>
@@ -98,21 +80,8 @@
 
     <repositories>
         <repository>
-            <id>tyrannyofheaven.org</id>
-            <url>http://maven.tyrannyofheaven.org</url>
-        </repository>
-        <repository>
-            <id>sk89q-mvn2</id>
-            <url>http://mvn2.sk89q.com/repo</url>
-        </repository>
-        <repository>
             <id>vault-repo</id>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
-        </repository>
-        <repository>
-            <id>Tabinol.me Artifactory</id>
-            <name>Tabinol.me Artifactory-releases</name>
-            <url>http://artifactory.tabinol.me/artifactory/public</url>
         </repository>
     </repositories>
 
@@ -130,77 +99,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldguard</artifactId>
-            <version>5.9</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>iconomy</artifactId>
-                    <groupId>com.nijikokun</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>prtree</artifactId>
-                    <groupId>org.khelekore</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>opencsv</artifactId>
-                    <groupId>net.sf.opencsv</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commandbook</artifactId>
-                    <groupId>com.sk89q</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.sk89q</groupId>
-            <artifactId>worldedit</artifactId>
-            <version>5.6.2</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>js</artifactId>
-                    <groupId>rhino</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jchronic</artifactId>
-                    <groupId>com.sk89q</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>truezip</artifactId>
-                    <groupId>de.schlichtherle</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.bekvon.bukkit</groupId>
-            <artifactId>Residence</artifactId>
-            <version>2.6.6.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.massivecraft</groupId>
-            <artifactId>Factions</artifactId>
-            <version>2.4.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency><!-- Required by Factions -->
-            <groupId>com.massivecraft</groupId>
-            <artifactId>mcore</artifactId>
-            <version>7.2.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>me.tabinol.factoid</groupId>
-            <artifactId>Factoid</artifactId>
-            <version>0.3</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.4</version>
+            <version>1.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -212,8 +113,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.9</version>
-            <scope>test</scope>
+            <version>4.12</version>
         </dependency>
     </dependencies>
 </project>
