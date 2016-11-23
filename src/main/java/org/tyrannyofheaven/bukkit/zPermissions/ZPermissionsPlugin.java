@@ -91,11 +91,7 @@ import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionEntity;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionRegion;
 import org.tyrannyofheaven.bukkit.zPermissions.model.PermissionWorld;
 import org.tyrannyofheaven.bukkit.zPermissions.model.UuidDisplayNameCache;
-import org.tyrannyofheaven.bukkit.zPermissions.region.FactionsRegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.FactoidRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.region.RegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.ResidenceRegionStrategy;
-import org.tyrannyofheaven.bukkit.zPermissions.region.WorldGuardRegionStrategy;
 import org.tyrannyofheaven.bukkit.zPermissions.service.DefaultPlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.PlayerPrefixHandler;
 import org.tyrannyofheaven.bukkit.zPermissions.service.ZPermissionsServiceImpl;
@@ -674,6 +670,7 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
         Map<String, RegionStrategy> strategies = new LinkedHashMap<>();
         RegionStrategy regionStrategy;
 
+        /*
         // WorldGuard
         regionStrategy = new WorldGuardRegionStrategy(this, getZPermissionsCore());
         strategies.put(regionStrategy.getName(), regionStrategy);
@@ -686,7 +683,7 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
         strategies.put(regionStrategy.getName(), regionStrategy);
 
         regionStrategy = new FactoidRegionStrategy(this, getZPermissionsCore());
-        strategies.put(regionStrategy.getName(), regionStrategy);
+        strategies.put(regionStrategy.getName(), regionStrategy); */
 
         // Run through list in preference order
         for (String rmName : regionManagers) {
