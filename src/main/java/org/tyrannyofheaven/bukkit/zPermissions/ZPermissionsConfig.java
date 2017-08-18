@@ -39,19 +39,7 @@ public interface ZPermissionsConfig {
 
     public String getDefaultPrimaryGroupTrack();
 
-    public boolean isVaultPrefixIncludesGroup();
-
-    public boolean isVaultMetadataIncludesGroup();
-
-    public boolean isVaultGroupTestUsesAssignedOnly();
-    
-    public boolean isVaultGetGroupsUsesAssignedOnly();
-
     public boolean isInheritedMetadata();
-
-    public String getVaultPlayerPrefixFormat();
-    
-    public String getVaultPlayerSuffixFormat();
 
     public int getSearchBatchSize();
     

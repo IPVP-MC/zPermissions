@@ -67,13 +67,12 @@ public class MetadataManager {
 
     // Lock for both of the above. Even though we're supposed to be
     // single-threaded, many MANY chat plugins are inherently broken and
-    // call Bukkit/Vault methods outside the main thread.
+    // call Bukkit methods outside the main thread.
     private final ReadWriteLock cacheLock = new ReentrantReadWriteLock();
 
     public MetadataManager(PermissionsResolver resolver, TransactionStrategy transactionStrategy) {
         this.resolver = resolver;
         this.transactionStrategy = transactionStrategy;
-        
     }
 
     private PermissionsResolver getResolver() {

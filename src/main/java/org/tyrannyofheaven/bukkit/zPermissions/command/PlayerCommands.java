@@ -266,7 +266,7 @@ public class PlayerCommands extends CommonCommands {
         sendMessage(sender, colorize("{GREEN}%s"), player.hasPermission(permission));
     }
 
-    @Command(value="settrack", description="Set track which determines primary group for Vault")
+    @Command(value="settrack", description="Set track which determines primary group")
     @Require("zpermissions.player.chat")
     public void settrack(CommandSender sender, @Session("entityName") String playerName, @Option(value="track", optional=true, completer="track") String track) {
         if (ToHStringUtils.hasText(track)) {

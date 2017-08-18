@@ -52,20 +52,4 @@ region-managers:
 
 inherited-metadata: false
 
-native-vault-bridges: true
-
-vault-prefix-includes-group: true
-
-vault-metadata-includes-group: true
-
-vault-group-test-uses-assigned-only: false
-
-vault-get-groups-uses-assigned-only: false
-
-vault-player-prefix-format: ''
-
-vault-player-suffix-format: ''
-
-log-vault-changes: false
-
 debug: false

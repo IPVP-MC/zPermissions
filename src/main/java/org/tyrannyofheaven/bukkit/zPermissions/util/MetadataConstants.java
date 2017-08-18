@@ -17,7 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.util;
 
 /**
  * Simple holder for the names of common metadata properties. These properties
- * have no intrinsic significance but do affect Vault.
+ * have no intrinsic significance.
  * 
  * @author zerothangel
  */

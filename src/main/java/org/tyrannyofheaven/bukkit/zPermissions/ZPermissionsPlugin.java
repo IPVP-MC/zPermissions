@@ -103,8 +103,6 @@ import org.tyrannyofheaven.bukkit.zPermissions.util.ModelDumper;
 import org.tyrannyofheaven.bukkit.zPermissions.util.RefreshTask;
 import org.tyrannyofheaven.bukkit.zPermissions.uuid.AvajeBulkUuidConverter;
 import org.tyrannyofheaven.bukkit.zPermissions.uuid.YamlBulkUuidConverter;
-import org.tyrannyofheaven.bukkit.zPermissions.vault.VaultChatBridge;
-import org.tyrannyofheaven.bukkit.zPermissions.vault.VaultPermissionBridge;
 
 import com.avaje.ebean.EbeanServer;
 import com.avaje.ebeaninternal.api.SpiEbeanServer;
@@ -166,24 +164,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
     // Default primary group track
     private static final String DEFAULT_PRIMARY_GROUP_TRACK = null;
-
-    // Default native Vault bridges
-    private static final boolean DEFAULT_NATIVE_VAULT_BRIDGES = true;
-
-    // Default Vault player prefix group fallback
-    private static final boolean DEFAULT_VAULT_PREFIX_INCLUDES_GROUP = true;
-
-    // Default Vault player metadata group fallback
-    private static final boolean DEFAULT_VAULT_METADATA_INCLUDES_GROUP = true;
-
-    // Default Vault behavior for playerInGroup()
-    private static final boolean DEFAULT_VAULT_GROUP_TEST_USES_ASSIGNED_ONLY = false;
-
-    // Default Vault behavior for getPlayerGroups()
-    private static final boolean DEFAULT_VAULT_GET_GROUPS_USES_ASSIGNED_ONLY = false;
-
-    // Default logging for Vault changes
-    private static final boolean DEFAULT_LOG_VAULT_CHANGES = false;
 
     // Filename of file-based storage
     private static final String FILE_STORAGE_FILENAME = "data.yml";
@@ -283,32 +263,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
     // Default primary group track
     private String defaultPrimaryGroupTrack;
-
-    // Whether to use native Vault bridges
-    private boolean nativeVaultBridges;
-
-    // Whether the native Vault bridge's getPlayerPrefix/getPlayerSuffix should
-    // fall back to the primary group
-    private boolean vaultPrefixIncludesGroup;
-
-    // Wehther the native Vault bridge's getPlayerInfo* methods should
-    // fall back to the primary group
-    private boolean vaultMetadataIncludesGroup;
-
-    // Whether Vault playerInGroup() should use assigned groups only
-    private boolean vaultGroupTestUsesAssignedOnly;
-    
-    // Whether Vault getPlayerGroups() should use assigned groups only
-    private boolean vaultGetGroupsUsesAssignedOnly;
-
-    // Custom player prefix format
-    private String vaultPlayerPrefixFormat;
-
-    // Custom player suffix format
-    private String vaultPlayerSuffixFormat;
-
-    // Whether to log Vault changes at INFO level
-    private boolean logVaultChanges;
 
     // Whether the database should be read-only
     private boolean databaseReadOnly;
@@ -631,14 +585,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
             PlayerPrefixHandler prefixHandler = new DefaultPlayerPrefixHandler(getZPermissionsConfig());
             ZPermissionsService service = new ZPermissionsServiceImpl(this, getResolver(), getPermissionService(), metadataManager, getRetryingTransactionStrategy(), getZPermissionsConfig(), prefixHandler);
             getServer().getServicesManager().register(ZPermissionsService.class, service, this, ServicePriority.Normal);
-
-            if (nativeVaultBridges && Bukkit.getPluginManager().getPlugin("Vault") != null) {
-                // Set up Vault bridges
-                new VaultPermissionBridge(this, getResolver(), storageStrategy, getZPermissionsCore(), service, getZPermissionsConfig()).register();
-                log(this, "Installed native Vault Permissions bridge");
-                new VaultChatBridge(this, getZPermissionsCore(), storageStrategy, service, getZPermissionsConfig()).register();
-                log(this, "Installed native Vault Chat bridge");
-            }
 
             // Make sure everyone currently online has permissions
             // NB Do in foreground
@@ -1067,26 +1013,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
         return defaultPrimaryGroupTrack;
     }
 
-    @Override
-    public boolean isVaultPrefixIncludesGroup() {
-        return vaultPrefixIncludesGroup;
-    }
-
-    @Override
-    public boolean isVaultMetadataIncludesGroup() {
-        return vaultMetadataIncludesGroup;
-    }
-
-    @Override
-    public boolean isVaultGroupTestUsesAssignedOnly() {
-        return vaultGroupTestUsesAssignedOnly;
-    }
-
-    @Override
-    public boolean isVaultGetGroupsUsesAssignedOnly() {
-        return vaultGetGroupsUsesAssignedOnly;
-    }
-
     public boolean isInheritedMetadata() {
         return inheritedMetadata;
     }
@@ -1219,14 +1145,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
         refreshTask.setDelay(config.getInt("bulk-refresh-delay", DEFAULT_BULK_REFRESH_DELAY));
         autoRefreshInterval = config.getInt("auto-refresh-interval", DEFAULT_AUTO_REFRESH_INTERVAL);
         autoRefreshForce = config.getBoolean("auto-refresh-force", DEFAULT_AUTO_REFRESH_FORCE);
-        nativeVaultBridges = config.getBoolean("native-vault-bridges", DEFAULT_NATIVE_VAULT_BRIDGES);
-        vaultPrefixIncludesGroup = config.getBoolean("vault-prefix-includes-group", DEFAULT_VAULT_PREFIX_INCLUDES_GROUP);
-        vaultMetadataIncludesGroup = config.getBoolean("vault-metadata-includes-group", DEFAULT_VAULT_METADATA_INCLUDES_GROUP);
-        vaultGroupTestUsesAssignedOnly = config.getBoolean("vault-group-test-uses-assigned-only", DEFAULT_VAULT_GROUP_TEST_USES_ASSIGNED_ONLY);
-        vaultGetGroupsUsesAssignedOnly = config.getBoolean("vault-get-groups-uses-assigned-only", DEFAULT_VAULT_GET_GROUPS_USES_ASSIGNED_ONLY);
-        vaultPlayerPrefixFormat = config.getString("vault-player-prefix-format", "");
-        vaultPlayerSuffixFormat = config.getString("vault-player-suffix-format", "");
-        logVaultChanges = config.getBoolean("log-vault-changes", DEFAULT_LOG_VAULT_CHANGES);
         inheritedMetadata = config.getBoolean("inherited-metadata", DEFAULT_INHERITED_METADATA);
         serviceMetadataPrefixHack = config.getBoolean("service-metadata-prefix-hack", DEFAULT_SERVICE_METADATA_PREFIX_HACK);
         // FIXME More hidden options
@@ -1431,12 +1349,7 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
     @Override
     public void logExternalChange(String message, Object... args) {
-        if (logVaultChanges) {
-            log(this, message, args);
-        }
-        else {
-            debug(this, message, args);
-        }
+        debug(this, message, args);
     }
 
     public int getSearchBatchSize() {
@@ -1445,16 +1358,6 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
 
     public int getSearchDelay() {
         return searchDelay;
-    }
-
-    @Override
-    public String getVaultPlayerPrefixFormat() {
-        return vaultPlayerPrefixFormat;
-    }
-
-    @Override
-    public String getVaultPlayerSuffixFormat() {
-        return vaultPlayerSuffixFormat;
     }
 
     @Override
