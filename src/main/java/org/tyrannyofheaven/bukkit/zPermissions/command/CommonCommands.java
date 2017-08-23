@@ -15,9 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.command;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.broadcastAdmin;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.*;
 import static org.tyrannyofheaven.bukkit.util.command.reader.CommandReader.abortBatchProcessing;
 
 import java.util.ArrayList;
@@ -151,12 +149,13 @@ public abstract class CommonCommands {
         // Don't allow messing with the dynamic permission
         if (checkDynamicPermission(sender, wp.getPermission())) return;
 
+        boolean v = value == null ? Boolean.TRUE : value;
         // Set permission.
         try {
             storageStrategy.getRetryingTransactionStrategy().execute(new TransactionCallbackWithoutResult() {
                 @Override
                 public void doInTransactionWithoutResult() throws Exception {
-                    storageStrategy.getPermissionService().setPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission(), value == null ? Boolean.TRUE : value);
+                    storageStrategy.getPermissionService().setPermission(name, uuid, group, wp.getRegion(), wp.getWorld(), wp.getPermission(), v);
                 }
             });
         }
@@ -164,12 +163,13 @@ public abstract class CommonCommands {
             handleMissingGroup(sender, e);
             return;
         }
-    
         sendMessage(sender, colorize("{GOLD}%s{YELLOW} set to {GREEN}%s{YELLOW} for %s%s"), permission, value == null ? Boolean.TRUE : value, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
         if (!group) {
+            sendPluginMessage(plugin, v ? "PlayerSet" : "PlayerUnset", uuid.toString(), permission);
             core.refreshPlayer(uuid, RefreshCause.COMMAND);
         }
         else {
+            sendPluginMessage(plugin, v ? "GroupSet" : "GroupUnset", name, permission);
             core.refreshAffectedPlayers(name);
         }
     }
@@ -200,10 +200,13 @@ public abstract class CommonCommands {
 
         if (result) {
             sendMessage(sender, colorize("{GOLD}%s{YELLOW} unset for %s%s"), permission, group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name);
-            if (group)
+            if (group) {
+                sendPluginMessage(plugin,"GroupUnset", name, permission);
                 core.refreshAffectedPlayers(name);
-            else
+            } else {
+                sendPluginMessage(plugin, "PlayerUnset", uuid.toString(), permission);
                 core.refreshPlayer(uuid, RefreshCause.COMMAND);
+            }
         }
         else {
             sendMessage(sender, colorize("%s%s{RED} does not set {GOLD}%s"), group ? ChatColor.DARK_GREEN : ChatColor.AQUA, name, permission);
@@ -250,10 +253,13 @@ public abstract class CommonCommands {
                     (group ? ChatColor.DARK_GREEN : ChatColor.AQUA),
                     name);
             core.invalidateMetadataCache(name, uuid, group);
-            if (group)
+            if (group) {
+                sendPluginMessage(plugin, "GroupDelete", name);
                 core.refreshAffectedPlayers(name);
-            else
+            } else {
+                sendPluginMessage(plugin, "PlayerDelete", uuid.toString());
                 core.refreshPlayer(uuid, RefreshCause.COMMAND);
+            }
             core.refreshExpirations();
         }
         else {
@@ -641,7 +647,8 @@ public abstract class CommonCommands {
             handleMissingGroup(sender, e);
             return;
         }
-    
+
+        sendPluginMessage(plugin, "PlayerAddGroup", playerUuid.toString(), groupName);
         sendMessage(sender, colorize("{AQUA}%s{YELLOW} added to {DARK_GREEN}%s"), playerName, groupName);
         core.invalidateMetadataCache(playerName, playerUuid, false);
         core.refreshPlayer(playerUuid, RefreshCause.GROUP_CHANGE);
@@ -669,6 +676,7 @@ public abstract class CommonCommands {
         });
     
         if (result) {
+            sendPluginMessage(plugin, "PlayerRemoveGroup", playerUuid.toString(), groupName);
             sendMessage(sender, colorize("{AQUA}%s{YELLOW} removed from {DARK_GREEN}%s"), playerName, groupName);
             core.invalidateMetadataCache(playerName, playerUuid, false);
             core.refreshPlayer(playerUuid, RefreshCause.GROUP_CHANGE);

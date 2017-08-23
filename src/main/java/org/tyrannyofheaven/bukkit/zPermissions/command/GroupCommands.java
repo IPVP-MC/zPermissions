@@ -15,9 +15,7 @@
  */
 package org.tyrannyofheaven.bukkit.zPermissions.command;
 
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.broadcastAdmin;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
-import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.*;
 import static org.tyrannyofheaven.bukkit.util.ToHStringUtils.delimitedString;
 import static org.tyrannyofheaven.bukkit.util.command.reader.CommandReader.abortBatchProcessing;
 import static org.tyrannyofheaven.bukkit.zPermissions.util.Utils.formatPlayerName;
@@ -112,6 +110,7 @@ public class GroupCommands extends CommonCommands {
             }
             
             if (result) {
+                sendPluginMessage(plugin, "GroupDeleteMembers", name);
                 sendMessage(sender, colorize("{YELLOW}Group {DARK_GREEN}%s{YELLOW} purged of members."), name);
                 core.invalidateMetadataCache(name, null, true);
                 if (core.refreshAffectedPlayers(name))
@@ -167,6 +166,7 @@ public class GroupCommands extends CommonCommands {
         });
         
         if (result) {
+            sendPluginMessage(plugin, "GroupCreate", groupName);
             broadcastAdmin(plugin, "%s created group %s", sender.getName(), groupName);
             sendMessage(sender, colorize("{YELLOW}Group {DARK_GREEN}%s{YELLOW} created."), groupName);
         }

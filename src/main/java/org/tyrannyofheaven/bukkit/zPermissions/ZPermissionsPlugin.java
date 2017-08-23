@@ -570,6 +570,9 @@ public class ZPermissionsPlugin extends JavaPlugin implements ZPermissionsCore, 
             initializeRegionStrategy();
             boolean regionSupport = regionStrategy != null && regionSupportEnable; // Need both
 
+            // Register BungeeCord plugin messaging
+            Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            
             // Install our listeners
             expirationRefreshHandler = new ExpirationRefreshHandler(getZPermissionsCore(), storageStrategy, this);
             Bukkit.getPluginManager().registerEvents(new ZPermissionsPlayerListener(getZPermissionsCore(), this, uuidResolver), this);

@@ -17,6 +17,7 @@ package org.tyrannyofheaven.bukkit.zPermissions.command;
 
 import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.colorize;
 import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendMessage;
+import static org.tyrannyofheaven.bukkit.util.ToHMessageUtils.sendPluginMessage;
 import static org.tyrannyofheaven.bukkit.util.command.reader.CommandReader.abortBatchProcessing;
 
 import java.util.ArrayList;
@@ -171,6 +172,7 @@ public class PlayerCommands extends CommonCommands {
             return;
         }
 
+        sendPluginMessage(plugin, "PlayerSetGroup", uuid.toString(), groupName);
         sendMessage(sender, colorize("{AQUA}%s{YELLOW}'s group set to {DARK_GREEN}%s"), playerName, groupName);
         core.invalidateMetadataCache(playerName, uuid, false);
         core.refreshPlayer(uuid, RefreshCause.GROUP_CHANGE);
